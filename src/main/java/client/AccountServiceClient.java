@@ -2,13 +2,18 @@ package client;
 
 // import statements for java.util, Google Guava and AccountsApi classes
 
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
+
 import business.Account;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class AccountServiceClient {
 
     private final AccountsApi accountsApi;

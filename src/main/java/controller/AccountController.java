@@ -1,35 +1,26 @@
 package controller;
 
 import business.Account;
+import business.AccountEngine;
 import client.AccountCreationRequest;
 import java.util.List;
-import java.util.stream.Collectors;
-import repository.AccountEntity;
-import repository.AccountRepository;
-// more import statements
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController("/accounts")
 public class AccountController {
 
-    private final AccountRepository accountRepository;
+    private final AccountEngine accountEngine;
 
-    public AccountController(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    public AccountController(AccountEngine accountEngine) {
+        this.accountEngine = accountEngine;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Account> getOpenAccounts(long typeId) {
-        return accountRepository.findAllByTypeIdAndClosedFalse(typeId).stream()
-            .map(this::mapFromEntity)
-            .collect(Collectors.toList());
-    }
-
-    public Account mapFromEntity(AccountEntity entity) {
-        Account account = new Account();
-        account.setId(entity.getId());
-        account.setName(entity.getName());
-        account.setClosed(false);
-        return account;
+        return accountEngine.findOpenAccounts(typeId);
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
